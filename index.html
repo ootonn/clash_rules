@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL 编码/解码工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tool-section {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .copy-button {
+            background-color: #2196F3;
+        }
+
+        .copy-button:hover {
+            background-color: #0b7dda;
+        }
+
+        .clear-button {
+            background-color: #f44336;
+        }
+
+        .clear-button:hover {
+            background-color: #da190b;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>URL 编码/解码工具</h1>
+
+    <div class="container">
+        <div class="tool-section">
+            <h2>URL 编码</h2>
+            <textarea id="encode-input" placeholder="输入要编码的文本..."></textarea>
+            <div class="button-group">
+                <button onclick="encodeUrl()">编码</button>
+                <button class="copy-button" onclick="copyText('encode-output')">复制结果</button>
+                <button class="clear-button" onclick="clearFields('encode-input', 'encode-output')">清空</button>
+            </div>
+            <h3>编码结果:</h3>
+            <textarea id="encode-output" readonly placeholder="编码后的结果将显示在这里..."></textarea>
+        </div>
+
+        <div class="tool-section">
+            <h2>URL 解码</h2>
+            <textarea id="decode-input" placeholder="输入要解码的文本..."></textarea>
+            <div class="button-group">
+                <button onclick="decodeUrl()">解码</button>
+                <button class="copy-button" onclick="copyText('decode-output')">复制结果</button>
+                <button class="clear-button" onclick="clearFields('decode-input', 'decode-output')">清空</button>
+            </div>
+            <h3>解码结果:</h3>
+            <textarea id="decode-output" readonly placeholder="解码后的结果将显示在这里..."></textarea>
+        </div>
+    </div>
+
+    <script>
+        function encodeUrl() {
+            const input = document.getElementById('encode-input').value;
+            try {
+                const encoded = encodeURIComponent(input);
+                document.getElementById('encode-output').value = encoded;
+            } catch (error) {
+                document.getElementById('encode-output').value = '编码出错: ' + error.message;
+            }
+        }
+
+        function decodeUrl() {
+            const input = document.getElementById('decode-input').value;
+            try {
+                const decoded = decodeURIComponent(input);
+                document.getElementById('decode-output').value = decoded;
+            } catch (error) {
+                document.getElementById('decode-output').value = '解码出错: ' + error.message;
+            }
+        }
+
+        function copyText(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+
+            // 显示临时复制成功消息
+            const originalValue = element.value;
+            element.value = '复制成功!';
+            setTimeout(() => {
+                element.value = originalValue;
+            }, 1000);
+        }
+
+        function clearFields(inputId, outputId) {
+            document.getElementById(inputId).value = '';
+            document.getElementById(outputId).value = '';
+        }
+    </script>
+</body>
+
+</html>
