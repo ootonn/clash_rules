@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 import argparse
-import requests
 import yaml
 from urllib.parse import quote
 from pathlib import Path
 
 default_sub_server_url = "http://127.0.0.1:25500"
-default_sub_url = "https://dash.pqjc.site/api/v1/client/subscribe?token=1eafe46f445ed95b52586581b12dfafd"
 default_config_url = "https://raw.githubusercontent.com/ootonn/clash_rules/refs/heads/main/clash_config.ini"
 
 def validate_yaml(content):
@@ -71,20 +69,23 @@ def convert_subscription(base_url, target, url, output, config=None):
         return False
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='订阅转换测试工具')
-    parser.add_argument('url', nargs='?', default=default_sub_url, 
-                       help='需要转换的订阅链接（可选，默认使用内置订阅）')
+    parser = argparse.ArgumentParser(
+        description='订阅转换测试工具',
+        epilog='示例: python subscription_tester.py "https://example.com/sub/xxxx"'
+    )
+    parser.add_argument('url',
+                       help='需要转换的订阅链接')
     parser.add_argument('-c', '--config', default=default_config_url,
                        help='远程模板文件URL（支持subconverter兼容模板）')
     parser.add_argument('-t', '--target', default='clash', 
                        help='目标格式 (默认: clash)')
-    parser.add_argument('-o', '--output', default='./output.yaml',
-                       help='输出文件路径 (默认: ./output.yaml)')
+    parser.add_argument('-o', '--output', default='./tmp/output.yaml',
+                       help='输出文件路径 (默认: ./tmp/output.yaml)')
     parser.add_argument('-b', '--base', default=default_sub_server_url,
                        help='订阅转换服务地址')
     
     args = parser.parse_args()
-    
+
     success = convert_subscription(
         base_url=args.base.rstrip('/'),
         target=args.target,
@@ -93,4 +94,4 @@ if __name__ == "__main__":
         config=args.config
     )
     
-    exit(0 if success else 1) 
+    exit(0 if success else 1)
